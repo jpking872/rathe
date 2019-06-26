@@ -11,8 +11,8 @@ $filenames = array(
 	'cover_art_image' => array(400000, array('jpg', 'jpeg', 'png')), 
 	'author_image' => array(400000, array('jpg', 'jpeg', 'png')), 
 	'retail_title_document' => array(1500000, array('pdf', 'doc', 'docx', 'rtf')), 
-	'epub_document' => array(1500000, array('epub')), 
-	'mobi_document' => array(1500000, array('mobi'))
+	'epub_document' => array(3000000, array('epub')), 
+	'mobi_document' => array(3000000, array('mobi'))
 );
 
 //user ID for use with filename (would be a POST variable)
