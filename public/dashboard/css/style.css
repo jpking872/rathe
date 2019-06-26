@@ -473,6 +473,11 @@ code {
   color: #0066b1;
 }
 
+.fileLabel {
+  margin-top: 5px;
+  margin-left:2px;
+}
+
 @media screen and (max-width: 576px) {
   #wrapper .sidebar-nav {
     display: none;

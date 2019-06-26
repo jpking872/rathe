@@ -28,13 +28,15 @@ if(isset($_POST['uploads']))
 	<meta name="description" content="">
 	<meta name="author" content="">
 	<link rel="icon" href="images/favicon.ico">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 	<title>rAthe!</title>
 
     <!-- Tags input CSS -->
-    <link href="dist/css/tagsinput.css" rel="stylesheet">
+    <!--link href="dist/css/tagsinput.css" rel="stylesheet"-->
     
     <!-- Bootstrap core CSS -->
-    <link href="dist/css/bootstrap.min.css" rel="stylesheet">
+    <!--link href="dist/css/bootstrap.min.css" rel="stylesheet"-->
     <!-- Icons -->
     <link href="css/font-awesome.css" rel="stylesheet">
     
@@ -317,7 +319,7 @@ if(isset($_POST['uploads']))
 								
 								<div class="card mb-4">
 									<div class="card-block">
-								    <form id="uploads" action="" method="POST" autocomplete="off">
+								    <form id="uploads" action="upload.php" method="POST" autocomplete="off" enctype="multipart/form-data">
 								    	<input id="step2" type="hidden" name="step2" value="2">
 								    	
 										<p class="card-title form-text">
@@ -326,9 +328,9 @@ if(isset($_POST['uploads']))
 										<span class="asterik-color">(*)</span> are required: </p>
 
 <div class="row">
-	<div class="col-md-6">
+	<div class="col-xl-6">
 
-<div class="form-group col-md-9">
+<div class="form-group col-sm-11 col-lg-9">
 	<label for="title_document"><strong>Title Document</strong>												    	
 		<span class="asterik-color">(files allowed: .pdf, .doc, .docx, .rtf)</span>
 		<a href="#" data-toggle="tooltip">
@@ -336,11 +338,12 @@ if(isset($_POST['uploads']))
 		</a></label>
 <div class="custom-file">
   <input type="file" class="custom-file-input" id="title_document" name="title_document" lang="en">
-  <label class="custom-file-label" for="customFileLang">Select file</label>
+  <label class="custom-file-label" for="title_document">Select file</label>
 </div>
+<label class="fileLabel">current file: currentFile.pdf</label>
 </div>
 
-<div class="form-group col-md-9">
+<div class="form-group col-sm-11 col-lg-9">
 	<label for="cover_art_image"><strong>Cover Art Image</strong>												    	
 		<span class="asterik-color">(files allowed: .jpg, .jpeg, .png)</span>
 		<a href="#" data-toggle="tooltip">
@@ -348,15 +351,15 @@ if(isset($_POST['uploads']))
 		</a></label>
 <div class="custom-file">
   <input type="file" class="custom-file-input" id="cover_art_image" name="cover_art_image" lang="en">
-  <label class="custom-file-label" for="customFileLang">Select file</label>
+  <label class="custom-file-label" for="cover_art_image">Select file</label>
 </div>
 
-					
-										            <input id="cover_art_image_credit" type="text" name="cover_art_image_credit" class="form-control" value="" placeholder="Artist Credit: Cover Art Image" maxlength="250">
+				</div>	<div class="form-group col-sm-11 col-lg-9">
+										            <input id="cover_art_image_credit" type="text" name="cover_art_image_credit" class="form-control" value="" placeholder="Artist credit for cover art image" maxlength="250">
 
 </div>
 
-<div class="form-group col-md-9">
+<div class="form-group col-sm-11 col-lg-9">
 	<label for="title_document"><strong>Author Image</strong>												    	
 		<span class="asterik-color">(files allowed: .jpg, .jpeg, .png)</span>
 		<a href="#" data-toggle="tooltip">
@@ -364,28 +367,68 @@ if(isset($_POST['uploads']))
 		</a></label>
 <div class="custom-file">
   <input type="file" class="custom-file-input" id="author_image" name="author_image" lang="en">
-  <label class="custom-file-label" for="customFileLang">Select file</label>
+  <label class="custom-file-label" for="author_image">Select file</label>
 </div>
+<label class="fileLabel">current file: currentFile.jpg</label>
 
 
 				
-										            <input id="author_image_credit" type="text" name="author_image_credit" class="form-control" value="" placeholder="Artist Credit: Author Image" maxlength="250">
+				</div>	<div class="form-group col-sm-11 col-lg-9">
+										            <input id="author_image_credit" type="text" name="author_image_credit" class="form-control" value="" placeholder="Artist credit for author image" maxlength="250">
 
 </div>
 
 </div>
 
+<div class="col-xl-6">
+
+	<div class="form-group col-sm-11 col-lg-9">
+	<label for="retail_title_document"><strong>Retail Title Document</strong>												    	
+		<span class="asterik-color">(files allowed: .pdf, .doc, .docx, .rtf)</span>
+		<a href="#" data-toggle="tooltip">
+		<span class="fa fa-question-circle"></span>
+		</a></label>
+<div class="custom-file">
+  <input type="file" class="custom-file-input" id="retail_title_document" name="retail_title_document" lang="en">
+  <label class="custom-file-label" for="retail_title_document">Select file</label>
 </div>
-										<p>&nbsp;</p>
-										<p>&nbsp;</p>
-										<p>&nbsp;</p>
-										<p>&nbsp;</p>
-										<p>&nbsp;</p>
+</div>
+
+<div class="form-group col-sm-11 col-lg-9">
+	<label for="epub_document"><strong>ePub Document</strong>												    	
+		<span class="asterik-color">(files allowed: .ePub)</span>
+		<a href="#" data-toggle="tooltip">
+		<span class="fa fa-question-circle"></span>
+		</a></label>
+<div class="custom-file">
+  <input type="file" class="custom-file-input" id="epub_document" name="epub_document" lang="en">
+  <label class="custom-file-label" for="epub_document">Select file</label>
+</div>
+<label class="fileLabel">current file: currentFile.epub</label>
+</div>
+
+<div class="form-group col-sm-11 col-lg-9">
+	<label for="mobi_document"><strong>Mobi Document</strong>												    	
+		<span class="asterik-color">(files allowed: .mobi)</span>
+		<a href="#" data-toggle="tooltip">
+		<span class="fa fa-question-circle"></span>
+		</a></label>
+<div class="custom-file">
+  <input type="file" class="custom-file-input" id="mobi_document" name="mobi_document" lang="en">
+  <label class="custom-file-label" for="mobi_document">Select file</label>
+</div>
+</div>
+	
+
+</div>
+
+</div>
+						
 
 										<div class="row">
 									        <div class="col-4">
 									        	<br>
-						                    	<button type="button" class="btn btn-danger">
+						                    	<button type="submit" name="save" class="btn btn-danger">
 						                		 Save
 						                	    </button>
 									        	
@@ -393,7 +436,7 @@ if(isset($_POST['uploads']))
 					                    	<div class="col-5"></div>
 					                        <div class="col-3">
 						                    	<br>
-						                    	<button type="button" name="uploads" class="btn submit-button">
+						                    	<button type="submit" name="uploads" class="btn submit-button">
 						                		Next >
 						                	    </button>
 					                        </div>
@@ -426,7 +469,29 @@ if(isset($_POST['uploads']))
 	<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
-	<script src="dist/js/bootstrap.min.js"></script>
+	<!--script src="dist/js/bootstrap.min.js"></script-->
+	<script type="text/javascript">
+		$(document).ready(function () {
+
+		  $(".custom-file-input").on("change", function() {
+		  var fileName = $(this).val().split("\\").pop();
+		  $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+		  });
+
+		  /*$("#uploads").submit(function(e) {
+		  	var form = this;
+		  	$(".custom-file-input").each(function (i, obj) {
+		  		elementName = obj.name;
+		  		fileName = obj.value.split('\\').pop();
+		  		var tmpInput = document.createElement('input');
+		  		tmpInput.setAttribute('type', 'text');
+		  		tmpInput.setAttribute('name', elementName);
+		  		tmpInput.setAttribute('value', fileName);
+		  		form.appendChild(tmpInput);
+		  	})
+		  })*/
+		});
+	</script>
 	
 
 </body>
