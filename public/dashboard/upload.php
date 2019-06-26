@@ -55,7 +55,7 @@ foreach($filenames as $key => $value) {
 
 			array_pop($tmpFileNameCmps);
 			$newFileName = implode(".", $tmpFileNameCmps) . "_" . $userid . "_" . time() . "." . $tmpFileExtension;
-			$destPath = $uploadFileDir . $newFileName;
+			$destPath = $uploadFileDir . str_replace("_", "-", $key) . "/" . $newFileName;
 
 			if (move_uploaded_file($tmpFileTmpPath, $destPath)) {
 				$response[$key] = "success - " . $destPath;
@@ -69,6 +69,8 @@ foreach($filenames as $key => $value) {
 			continue;
 		}
 	} else {
+
+
 		$response[$key] = "No file uploaded";
 	}
 
