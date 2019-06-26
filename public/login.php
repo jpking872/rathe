@@ -1,7 +1,9 @@
 <?php
+session_start();
 
 if(isset($_POST['submit']))
 {
+    $_SESSION['step'] = 1;
     header("Location: dashboard/new_title.php");
     exit;
     

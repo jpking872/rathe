@@ -1,22 +1,14 @@
 <?php
+session_start();
 
-// Initialise form controller 
-$intake = true;
-$uploads = false;
+if (empty($_SESSION['step'])) $_SESSION['step'] = 1;
 
- 
-if(isset($_POST['intake']))
+if(isset($_POST['intake']) || isset($_POST['uploads']))
 {
-	$intake = false;
-	$uploads = true;
+	$_SESSION['step'] = 2;
 }
 
-if(isset($_POST['uploads']))
-{
-	$intake = false;
-	$uploads = true;
-	
-}
+$currentStep = $_SESSION['step'];
 
 ?>
 
@@ -60,7 +52,7 @@ if(isset($_POST['uploads']))
 				</header>
                
 
-                <?php if($intake){ ?>
+                <?php if ($currentStep == 1) { ?>
 			    <div class="form-group row">
 				    <div class="col-sm-10">
 					    <ul class="list-unstyled multi-steps form-text">
@@ -297,8 +289,8 @@ if(isset($_POST['uploads']))
 					</div>
 				</section>
 
+			<?php } else if ($currentStep == 2) { ?>
 
-			<?php } if($uploads){ ?>
 			    <div class="form-group row">
 				    <div class="col-sm-10">
 					    <ul class="list-unstyled multi-steps form-text">
@@ -476,24 +468,13 @@ if(isset($_POST['uploads']))
 	<script type="text/javascript">
 		$(document).ready(function () {
 
+		  //updates file name in selector
 		  $(".custom-file-input").on("change", function() {
-		  var fileName = $(this).val().split("\\").pop();
-		  $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+		  	var fileName = $(this).val().split("\\").pop();
+		  	$(this).siblings(".custom-file-label").addClass("selected").html(fileName);
 		  });
 
-		  /*$("#uploads").submit(function(e) {
-		  	var form = this;
-		  	$(".custom-file-input").each(function (i, obj) {
-		  		elementName = obj.name;
-		  		fileName = obj.value.split('\\').pop();
-		  		var tmpInput = document.createElement('input');
-		  		tmpInput.setAttribute('type', 'text');
-		  		tmpInput.setAttribute('name', elementName);
-		  		tmpInput.setAttribute('value', fileName);
-		  		form.appendChild(tmpInput);
-		  	})
-		  })*/
-		});
+	});
 	</script>
 	
 

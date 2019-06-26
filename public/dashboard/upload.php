@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header("Location: /dashboard/new_title.php");
@@ -58,7 +59,7 @@ foreach($filenames as $key => $value) {
 			$destPath = $uploadFileDir . $newFileName;
 
 			if (move_uploaded_file($tmpFileTmpPath, $destPath)) {
-				$response[$key] = "success";
+				$response[$key] = "success - " . $destPath;
 			} else {
 				$response[$key] = "error moving file";
 			}
@@ -74,8 +75,7 @@ foreach($filenames as $key => $value) {
 
 }
 
-
-
+$_SESSION['step'] = 2;
 ?>
 
 <pre><?php print_r($_POST); print_r($_FILES); print_r($response); ?></pre>
