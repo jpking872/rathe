@@ -338,6 +338,37 @@ $currentStep = $_SESSION['step'];
 <label class="fileLabel">current file: currentFile.pdf</label>
 </div>
 
+
+										    	<div class="form-group col-md-11">
+										        	<label class="col-form-label">
+										        	<strong>Do you have a cover art image?</strong>
+										        	<span class="asterik-color">(*)</span>
+													    <a href="#" data-toggle="tooltip">
+										            		<span class="fa fa-question-circle"></span>
+										            	</a>
+
+													</label>
+												
+
+													<div>
+													    <div class="custom-control custom-radio custom-control-inline">
+														    
+														    <input class="custom-control-input" id="coverYes" name="cover" type="radio" value="yes">
+
+														    <label class="custom-control-label custom-control-description" for="coverYes">Yes</label>
+
+													    </div>
+													    <div class="custom-control custom-radio custom-control-inline">
+														    <input class="custom-control-input" id="coverNo" name="cover" type="radio" value="no" checked>
+
+														    <label class="custom-control-label custom-control-description" for="coverNo">No
+														    </label>
+														    
+													    </div>
+
+												    </div>
+											    </div>
+<div class="coverArtImage">
 <div class="form-group col-sm-11 col-lg-9">
 	<label for="cover_art_image"><strong>Cover Art Image</strong>												    	
 		<span class="asterik-color">(files allowed: .jpg, .jpeg, .png)</span>
@@ -353,7 +384,39 @@ $currentStep = $_SESSION['step'];
 										            <input id="cover_art_image_credit" type="text" name="cover_art_image_credit" class="form-control" value="" placeholder="Artist credit for cover art image" maxlength="250">
 
 </div>
+</div>
 
+										    	<div class="form-group col-md-11">
+										        	<label class="col-form-label">
+										        	<strong>Do you have an author bio image?</strong>
+										        	<span class="asterik-color">(*)</span>
+													    <a href="#" data-toggle="tooltip">
+										            		<span class="fa fa-question-circle"></span>
+										            	</a>
+
+													</label>
+												
+
+													<div>
+													    <div class="custom-control custom-radio custom-control-inline">
+														    
+														    <input class="custom-control-input" id="bioYes" name="bio" type="radio" value="yes">
+
+														    <label class="custom-control-label custom-control-description" for="bioYes">Yes</label>
+
+													    </div>
+													    <div class="custom-control custom-radio custom-control-inline">
+														    <input class="custom-control-input" id="bioNo" name="bio" type="radio" value="no" checked>
+
+														    <label class="custom-control-label custom-control-description" for="bioNo">No
+														    </label>
+														    
+													    </div>
+
+												    </div>
+											    </div>
+
+<div class="authorImage">
 <div class="form-group col-sm-11 col-lg-9">
 	<label for="title_document"><strong>Author Image</strong>												    	
 		<span class="asterik-color">(files allowed: .jpg, .jpeg, .png)</span>
@@ -371,6 +434,7 @@ $currentStep = $_SESSION['step'];
 				</div>	<div class="form-group col-sm-11 col-lg-9">
 										            <input id="author_image_credit" type="text" name="author_image_credit" class="form-control" value="" placeholder="Artist credit for author image" maxlength="250">
 
+</div>
 </div>
 
 </div>
@@ -473,6 +537,46 @@ $currentStep = $_SESSION['step'];
 		  	var fileName = $(this).val().split("\\").pop();
 		  	$(this).siblings(".custom-file-label").addClass("selected").html(fileName);
 		  });
+
+		  $("#coverYes").click(function() { $(".coverArtImage").show() })
+		  $("#coverNo").click(function() { 
+		  	$(".coverArtImage").hide(); 
+		  	$("#cover_art_image").val(null); 
+		  	$("#cover_art_image").siblings(".custom-file-label").html("Select file"); 
+		  	$("#cover_art_image_credit").val(""); 
+		  })
+
+		  $("#bioYes").click(function() { $(".authorImage").show() })
+		  $("#bioNo").click(function() { 
+		  	$(".authorImage").hide(); 
+		  	$("#author_image").val(null); 
+		  	$("#author_image").siblings(".custom-file-label").html("Select file"); 
+		  	$("#author_image_credit").val(""); 
+		  })
+
+		  $("#uploads").submit(function(e) {
+		  		e.preventDefault();
+		  		var formData = new FormData($(this)[0]);
+				$.ajax({
+				       url: 'upload.php',
+				       type: 'POST',
+				       data: formData,
+				       async: false,
+				       cache: false,
+				       contentType: false,
+				       enctype: 'multipart/form-data',
+				       processData: false,
+				       success: function (response) {
+				         console.log(response);
+				       },
+				       error: function (error) {
+				       	console.log(error)
+				       }
+				   });
+				   return false;
+
+
+		  })
 
 	});
 	</script>

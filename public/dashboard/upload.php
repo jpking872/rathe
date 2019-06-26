@@ -33,7 +33,6 @@ foreach($filenames as $key => $value) {
 	$tmpFileNameCmps = explode(".", $tmpFileName);
 	$tmpFileExtension = strtolower(end($tmpFileNameCmps));
 
-
 	//do nothing if no file submitted
 	if ($tmpFileName) {
 

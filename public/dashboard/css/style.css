@@ -478,6 +478,10 @@ code {
   margin-left:2px;
 }
 
+.coverArtImage, .authorImage {
+  display:none;
+}
+
 @media screen and (max-width: 576px) {
   #wrapper .sidebar-nav {
     display: none;
