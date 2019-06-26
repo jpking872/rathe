@@ -321,6 +321,9 @@ if(isset($_POST['uploads']))
 									<div class="card-block">
 								    <form id="uploads" action="upload.php" method="POST" autocomplete="off" enctype="multipart/form-data">
 								    	<input id="step2" type="hidden" name="step2" value="2">
+
+								    	<!-- echo user ID here -->
+								    	<input name="userid" type="hidden" value="<?php echo "1" ?>">
 								    	
 										<p class="card-title form-text">
 										<br />
