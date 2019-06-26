@@ -54,11 +54,11 @@ foreach($filenames as $key => $value) {
 			}
 
 			array_pop($tmpFileNameCmps);
-			$newFileName = implode(".", $tmpFileNameCmps) . "_" . $userid . "_" . time() . $tmpFileExtension;
+			$newFileName = implode(".", $tmpFileNameCmps) . "_" . $userid . "_" . time() . "." . $tmpFileExtension;
 			$destPath = $uploadFileDir . $newFileName;
 
 			if (move_uploaded_file($tmpFileTmpPath, $destPath)) {
-				$resposne[$key] = "success";
+				$response[$key] = "success";
 			} else {
 				$response[$key] = "error moving file";
 			}
