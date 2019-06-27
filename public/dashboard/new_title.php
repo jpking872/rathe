@@ -660,31 +660,35 @@ $currentStep = $_SESSION['step'];
                         var resarray = res[x].split("|");
                         var resstring = resarray[0];
 
-                        $("#" + x + "_error").hide();
-                        $("#" + x + "_error").text("");
+                        var errorspan = "." + x + "_error";
+
+                        console.log(errorspan)
+
+                        $(errorspan).hide();
+                        $(errorspan).text("");
 
                        switch(resstring) {
                             case "no file uploaded":
                                 break;
                             case "maximum size exceeded":
-                                $("#" + x + "_error").show();
-                                $("#" + x + "_error").text("File is too large");
+                                $(errorspan).show();
+                                $(errorspan).text("File is too large");
                                 break;
                             case "invalid file type":
-                                $("#" + x + "_error").show();
-                                $("#" + x + "_error").text("Invalid file type");
+                                $(errorspan).show();
+                                $(errorspan).text("Invalid file type");
                                 break;
                             case "error moving file":
-                                $("#" + x + "_error").show();
-                                $("#" + x + "_error").text("Error uploading file");
+                                $(errorspan).show();
+                                $(errorspan).text("Error uploading file");
                                 break;
                             case "file upload error":
-                                $("#" + x + "_error").show();
-                                $("#" + x + "_error").text("System upload error");
+                                $(errorspan).show();
+                                $(errorspan).text("System upload error");
                                 break;
                            case "invalid mime type":
-                               $("#" + x + "_error").show();
-                               $("#" + x + "_error").text("Invalid mime type");
+                               $(errorspan).show();
+                               $(errorspan).text("Invalid mime type");
                                break;
                             case "success":
                                 break;

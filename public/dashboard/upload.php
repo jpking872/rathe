@@ -3,8 +3,8 @@ session_start();
 
 //user must be logged in to upload
 if ($_SESSION['loggedIn'] !== "yes") {
-    header("Location: /dashboard/new_title.php");
-    exit;
+    //header("Location: /dashboard/new_title.php");
+    //exit;
 }
 
 //prevent direct access to this file
@@ -99,7 +99,7 @@ foreach($filenames as $key => $value) {
                     break;
             }
 
-            if (!validMime) {
+            if (!$validMime) {
                 $response[$key] = "invalid mime type";
                 continue;
             }
