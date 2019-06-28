@@ -374,6 +374,10 @@ $currentStep = $_SESSION['step'];
                                                         </div>
                                                         <span class="title_document_error"></span>
                                                         <label class="fileLabel">current file: currentFile.pdf</label>
+                                                        <div class='progress' id="progressDivId">
+                                                            <div class='progress-bar' id='progressBar'></div>
+                                                            <div class='percent' id='percent'>0%</div>
+                                                        </div>
                                                     </div>
 
 
@@ -567,7 +571,7 @@ $currentStep = $_SESSION['step'];
                                                 <div class="col-5"></div>
                                                 <div class="col-3">
                                                     <br>
-                                                    <input type="submit" name="uploads" class="btn submit-button" value="Next >">
+                                                    <input type="submit" name="uploads" class="btn submit-button" id="uploadButton" value="Next >">
 
                                                 </div>
                                             </div>
@@ -635,10 +639,10 @@ $currentStep = $_SESSION['step'];
             var form = $("#uploads")[0];
             var formData = new FormData(form)
             var formString = $.param(formData);
-            console.log(formString)
         });
 
         $("#uploads").submit(function (e) {
+
             e.preventDefault();
 
             var formData = new FormData($(this)[0]);
@@ -653,7 +657,9 @@ $currentStep = $_SESSION['step'];
                 processData: false,
                 success: function (response) {
 
-                    var res = JSON.parse(response);
+                   var res = JSON.parse(response);
+
+                    console.log(res)
 
                     for (var x in res) {
 
@@ -661,8 +667,6 @@ $currentStep = $_SESSION['step'];
                         var resstring = resarray[0];
 
                         var errorspan = "." + x + "_error";
-
-                        console.log(errorspan)
 
                         $(errorspan).hide();
                         $(errorspan).text("");
@@ -690,7 +694,13 @@ $currentStep = $_SESSION['step'];
                                $(errorspan).show();
                                $(errorspan).text("Invalid mime type");
                                break;
+                           case "error resizing image":
+                               $(errorspan).show();
+                               $(errorspan).text("Error resizing image");
+                               break;
                             case "success":
+                                $(errorspan).show();
+                                $(errorspan).text("success");
                                 break;
                         }
                     }
@@ -703,6 +713,8 @@ $currentStep = $_SESSION['step'];
 
 
         })
+
+
 
     });
 </script>

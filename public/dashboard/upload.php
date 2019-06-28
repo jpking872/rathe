@@ -44,6 +44,9 @@ $authorDir = 'default-author.jpg';
 function CheckImageMimeType($tmpFile, $mimeArray) {
 
     $imageInfo = getimagesize($tmpFile);
+
+    //return $imageInfo['mime'];
+
     if (in_array($imageInfo['mime'], $mimeArray)) {
         return true;
     }
@@ -59,6 +62,8 @@ function CheckFileMimeType($tmpFile, $mimeArray) {
     $mtype = finfo_file($finfo, $tmpFile);
     finfo_close($finfo);
 
+    //return $mtype;
+
     if (in_array($mtype, $mimeArray)) {
         return true;
     }
@@ -68,7 +73,43 @@ function CheckFileMimeType($tmpFile, $mimeArray) {
     }
 }
 
+function ResizeImage($origFile, $newFile) {
+
+    $info = getimagesize($origFile);
+
+    if ($info['mime'] == 'image/jpg' || $info['mime'] == 'image/jpeg') {
+        $srcimg = imagecreatefromjpeg($origFile);
+    } else if ($info['mime'] == 'image/png') {
+        $srcimg = imagecreatefrompng($origFile);
+    }
+
+    $origx = imagesx($srcimg);
+    $origy = imagesy($srcimg);
+
+    if ($origx >= $origy) {
+        $newx = 150;
+        $newy = $origy / ($origx / 150);
+    } else {
+        $newy = 150;
+        $newx = $origx / ($origy / 150);
+    }
+
+    $newimg = imagecreatetruecolor($newx, $newy);
+    imagecopyresampled($newimg, $srcimg, 0, 0, 0, 0, $newx, $newy, $origx, $origy);
+
+    if ($info['mime'] == 'image/jpg' || $info['mime'] == 'image/jpeg') {
+        $result = imagejpeg($newimg, $newFile, 80);
+    } else if ($info['mime'] == 'image/png') {
+        $result = imagepng($newimg, $newFile, 8);
+    }
+
+    return $result;
+
+
+}
+
 $response = array();
+$mtype = array();
 
 foreach($filenames as $key => $value) {
 
@@ -99,7 +140,8 @@ foreach($filenames as $key => $value) {
                     break;
             }
 
-            if (!$validMime) {
+            //$mtype[$key] = $validMime;
+            if ($validMime) {
                 $response[$key] = "invalid mime type";
                 continue;
             }
@@ -119,11 +161,22 @@ foreach($filenames as $key => $value) {
 			}
 
 			array_pop($tmpFileNameCmps);
-			$newFileName = implode(".", $tmpFileNameCmps) . "_" . $userid . "_" . time() . "." . $tmpFileExtension;
-			$destPath = $uploadFileDir . str_replace("_", "-", $key) . "/" . $newFileName;
+			$baseFileName = implode(".", $tmpFileNameCmps) . "_" . $userid . "_" . time();
+			$newFileName = $baseFileName . "." . $tmpFileExtension;
+			$subDir = str_replace("_", "-", $key) . "/";
+			$destPath = $uploadFileDir . $subDir . $newFileName;
+            $resizeFileName = $uploadFileDir . $subDir . $baseFileName . "_r." . $tmpFileExtension;
 
 			if (move_uploaded_file($tmpFileTmpPath, $destPath)) {
 				$response[$key] = "success|" . $destPath;
+
+				//if image, resize
+				if($key == "cover_art_image" || $key == "author_image") {
+                    if (($result = ResizeImage($destPath, $resizeFileName)) === false) {
+                        $response[$key] = "error resizing image";
+                    }
+                }
+
 			} else {
 				$response[$key] = "error moving file";
 			}
@@ -150,3 +203,4 @@ foreach($filenames as $key => $value) {
 $_SESSION['step'] = 2;
 
 echo json_encode($response);
+//echo json_encode(array("response" => $response, "mtype" => $mtype));
