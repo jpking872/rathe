@@ -373,11 +373,7 @@ $currentStep = $_SESSION['step'];
                                                                 file</label>
                                                         </div>
                                                         <span class="title_document_error"></span>
-                                                        <label class="fileLabel">current file: currentFile.pdf</label>
-                                                        <div class='progress' id="progressDivId">
-                                                            <div class='progress-bar' id='progressBar'></div>
-                                                            <div class='percent' id='percent'>0%</div>
-                                                        </div>
+                                                        <label class="fileLabelTitle">currentFile.pdf</label>
                                                     </div>
 
 
@@ -478,7 +474,7 @@ $currentStep = $_SESSION['step'];
 
                                                     <div class="authorImage">
                                                         <div class="form-group col-sm-11 col-lg-9">
-                                                            <label for="title_document"><strong>Author Image</strong>
+                                                            <label for="author_image"><strong>Author Image</strong>
                                                                 <span class="asterik-color">(files allowed: .jpg, .jpeg, .png, 400KB max)</span>
                                                                 <a href="#" data-toggle="tooltip">
                                                                     <span class="fa fa-question-circle"></span>
@@ -523,6 +519,7 @@ $currentStep = $_SESSION['step'];
                                                                    for="retail_title_document">Select file</label>
                                                         </div>
                                                         <span class="retail_title_document_error"></span>
+                                                        <label class="fileLabelRetailTitle"></label>
                                                     </div>
 
                                                     <div class="form-group col-sm-11 col-lg-9">
@@ -538,7 +535,7 @@ $currentStep = $_SESSION['step'];
                                                                 file</label>
                                                         </div>
                                                         <span class="epub_document_error"></span>
-                                                        <label class="fileLabel">current file: currentFile.epub</label>
+                                                        <label class="fileLabel">currentFile.epub</label>
                                                     </div>
 
                                                     <div class="form-group col-sm-11 col-lg-9">
@@ -645,6 +642,12 @@ $currentStep = $_SESSION['step'];
 
             e.preventDefault();
 
+            /*if ($("#title_document").val() == "" && $(".fileLabelTitle").text() == "" && $("#retail_title_document").val() == "" && $(".fileLabelRetailTitle.text() == "")) {
+                $(".title_document_error, .retail_title_document_error").show();
+                $(".title_document_error, .retail_title_document_error").text("Must have a title document");
+                return false;
+            }*/
+
             var formData = new FormData($(this)[0]);
             $.ajax({
                 url: 'upload.php',
@@ -673,6 +676,8 @@ $currentStep = $_SESSION['step'];
 
                        switch(resstring) {
                             case "no file uploaded":
+                                $(errorspan).show();
+                                $(errorspan).text("No file uploaded");
                                 break;
                             case "maximum size exceeded":
                                 $(errorspan).show();
