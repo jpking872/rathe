@@ -1,6 +1,15 @@
 <?php
 session_start();
 
+//destination directory
+$_SESSION['upload-dir'] = "C:\Users\jonat\Documents\Rathe\uploads\\";
+//default cover art image name and path
+$_SESSION['cover-default'] = 'default-cover.jpg';
+//default author image name and path
+$_SESSION['author-default'] = 'default-author.jpg';
+
+$_SESSION['userid'] = 1;
+
 //assume user is logged in
 $_SESSION['loggedIn'] = "yes";
 
@@ -22,18 +31,18 @@ $currentStep = $_SESSION['step'];
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="images/favicon.ico">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+    <!--link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"-->
+    <!--script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
             integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-            crossorigin="anonymous"></script>
+            crossorigin="anonymous"></script-->
     <title>rAthe!</title>
 
     <!-- Tags input CSS -->
-    <!--link href="dist/css/tagsinput.css" rel="stylesheet"-->
+    <link href="dist/css/tagsinput.css" rel="stylesheet">
 
     <!-- Bootstrap core CSS -->
-    <!--link href="dist/css/bootstrap.min.css" rel="stylesheet"-->
+    <link href="dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Icons -->
     <link href="css/font-awesome.css" rel="stylesheet">
 
@@ -349,9 +358,6 @@ $currentStep = $_SESSION['step'];
                                               enctype="multipart/form-data">
                                             <input id="step2" type="hidden" name="step2" value="2">
 
-                                            <!-- echo user ID here -->
-                                            <input name="userid" type="hidden" value="<?php echo "1" ?>">
-
                                             <p class="card-title form-text">
                                                 <br/>
                                                 All fields marked with an asterisk
@@ -362,7 +368,7 @@ $currentStep = $_SESSION['step'];
 
                                                     <div class="form-group col-sm-11 col-lg-9">
                                                         <label for="title_document"><strong>Title Document</strong>
-                                                            <span class="asterik-color">(files allowed: .pdf, .doc, .docx, .rtf, 1.5.MB max)</span>
+                                                            <span class="asterik-color">(*)(files allowed: .pdf, .doc, .docx, .rtf, 1.5.MB max)</span>
                                                             <a href="#" data-toggle="tooltip">
                                                                 <span class="fa fa-question-circle"></span>
                                                             </a></label>
@@ -373,14 +379,14 @@ $currentStep = $_SESSION['step'];
                                                                 file</label>
                                                         </div>
                                                         <span class="title_document_error"></span>
-                                                        <label class="fileLabelTitle">currentFile.pdf</label>
+                                                        <label class="fileLabelTitle"></label>
                                                     </div>
 
 
                                                     <div class="form-group col-md-11">
                                                         <label class="col-form-label">
                                                             <strong>Do you have a cover art image?</strong>
-                                                            <span class="asterik-color">(*)</span>
+                                                            <span class="asterik-color"></span>
                                                             <a href="#" data-toggle="tooltip">
                                                                 <span class="fa fa-question-circle"></span>
                                                             </a>
@@ -441,7 +447,7 @@ $currentStep = $_SESSION['step'];
                                                     <div class="form-group col-md-11">
                                                         <label class="col-form-label">
                                                             <strong>Do you have an author bio image?</strong>
-                                                            <span class="asterik-color">(*)</span>
+                                                            <span class="asterik-color"></span>
                                                             <a href="#" data-toggle="tooltip">
                                                                 <span class="fa fa-question-circle"></span>
                                                             </a>
@@ -602,7 +608,7 @@ $currentStep = $_SESSION['step'];
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"
         integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
         crossorigin="anonymous"></script>
-<!--script src="dist/js/bootstrap.min.js"></script-->
+<script src="dist/js/bootstrap.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
 
@@ -642,11 +648,14 @@ $currentStep = $_SESSION['step'];
 
             e.preventDefault();
 
-            /*if ($("#title_document").val() == "" && $(".fileLabelTitle").text() == "" && $("#retail_title_document").val() == "" && $(".fileLabelRetailTitle.text() == "")) {
+            console.log($("#title_document").val(), $(".fileLabelTitle").text(), $("#retail_title_document").val(), $(".fileLabelRetailTitle").text());
+
+            if ($("#title_document").val() == "" && $(".fileLabelTitle").text() == "" && $("#retail_title_document").val() == "" && $(".fileLabelRetailTitle").text() == "") {
                 $(".title_document_error, .retail_title_document_error").show();
-                $(".title_document_error, .retail_title_document_error").text("Must have a title document");
+                $(".title_document_error").text("Must have at least one title document");
+                $(".retail_title_document_error").text("Must have at least one title document");
                 return false;
-            }*/
+            }
 
             var formData = new FormData($(this)[0]);
             $.ajax({
@@ -665,6 +674,14 @@ $currentStep = $_SESSION['step'];
                     console.log(res)
 
                     for (var x in res) {
+
+                        if (x == "valid") {
+                            if (res[x] == true) {
+                                //window.location.href = "/dashboard/done.php";
+                                console.log('redirect')
+                            }
+                            continue;
+                        }
 
                         var resarray = res[x].split("|");
                         var resstring = resarray[0];

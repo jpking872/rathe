@@ -1,6 +1,14 @@
 <?php
 session_start();
 
+$uploadFileDir = $_SESSION['upload-dir'];
+//default cover art image name and path
+$coverDir = $_SESSION['cover-default'];
+//default author image name and path
+$authorDir = $_SESSION['author-default'];
+
+$userid = $_SESSION['userid'];
+
 //user must be logged in to upload
 if ($_SESSION['loggedIn'] !== "yes") {
     //header("Location: /dashboard/new_title.php");
@@ -32,14 +40,7 @@ $filenames = array(
 );
 
 //user ID for use with filename (would be a POST variable)
-$userid = $_POST['userid'];
-
-//destination directory
-$uploadFileDir = 'C:\Users\jonat\Documents\Rathe\uploads\\';
-//default cover art image name and path
-$coverDir = 'default-cover.jpg';
-//default author image name and path
-$authorDir = 'default-author.jpg';
+$userid = $_SESSION['userid'];
 
 function CheckImageMimeType($tmpFile, $mimeArray) {
 
@@ -130,21 +131,21 @@ foreach($filenames as $key => $value) {
             switch($key) {
                 case "title_document":
                 case "retail_title_document":
-                    $validMime = CheckImageMimeType($tmpFileTmpPath, $value[2]);
+                    //$validMime = CheckImageMimeType($tmpFileTmpPath, $value[2]);
                     break;
                 case "cover_art_image":
                 case "author_image":
                 case "epub_document":
                 case "mobi_document":
-                    $validMime = CheckFileMimeType($tmpFileTmpPath, $value[2]);
+                    //$validMime = CheckFileMimeType($tmpFileTmpPath, $value[2]);
                     break;
             }
 
             //$mtype[$key] = $validMime;
-            if ($validMime) {
+            /*if ($validMime) {
                 $response[$key] = "invalid mime type";
                 continue;
-            }
+            }*/
 
 			//check maximum size
 			$maxSize = $value[0];
@@ -193,14 +194,30 @@ foreach($filenames as $key => $value) {
         } else if ($key == "author_image") {
 	        $response[$key] = "success|" . $authorDir;
         } else {
-            $response[$key] = "no file uploaded";
+            $response[$key] = "success|no file uploaded";
         }
 
 	}
 
 }
 
-$_SESSION['step'] = 2;
+foreach($response as $key => $value) {
+
+    $isValid = true;
+
+    $result = explode("|", $value);
+
+    if ($result[0] != "success") {
+        $isValid = false;
+    }
+
+}
+
+if ($isValid) {
+    $response['valid'] = true;
+} else {
+    $response['valid'] = false;
+}
 
 echo json_encode($response);
-//echo json_encode(array("response" => $response, "mtype" => $mtype));
+
