@@ -435,7 +435,7 @@ $currentStep = $_SESSION['step'];
                                                             <label class="fileLabelTitle fileLabel"></label>
 
                                                         </div>
-                                                        <div class="form-group col-sm-11 col-lg-9" style="margin-top:-25px">
+                                                        <div class="form-group col-sm-11 col-lg-9" style="margin-top:-20px">
                                                             <label for="cover_art_image_credit"><strong>Cover art image credit</strong></label>
                                                             <input id="cover_art_image_credit" type="text"
                                                                    name="cover_art_image_credit" class="form-control"
@@ -498,7 +498,7 @@ $currentStep = $_SESSION['step'];
 
 
                                                         </div>
-                                                        <div class="form-group col-sm-11 col-lg-9" style="margin-top:-25px">
+                                                        <div class="form-group col-sm-11 col-lg-9" style="margin-top:-20px">
                                                             <label for="cover_art_image_credit"><strong>Author image credit</strong></label>
                                                             <input id="author_image_credit" type="text"
                                                                    name="author_image_credit" class="form-control"
