@@ -379,7 +379,7 @@ $currentStep = $_SESSION['step'];
                                                                 file</label>
                                                         </div>
                                                         <span class="title_document_error"></span>
-                                                        <label class="fileLabelTitle"></label>
+                                                        <label class="fileLabelTitle fileLabel"></label>
                                                     </div>
 
 
@@ -432,9 +432,11 @@ $currentStep = $_SESSION['step'];
                                                                     file</label>
                                                             </div>
                                                             <span class="cover_art_image_error"></span>
+                                                            <label class="fileLabelTitle fileLabel"></label>
 
                                                         </div>
                                                         <div class="form-group col-sm-11 col-lg-9">
+                                                            <label for="cover_art_image_credit"><strong>Cover art image credit</strong></label>
                                                             <input id="cover_art_image_credit" type="text"
                                                                    name="cover_art_image_credit" class="form-control"
                                                                    value=""
@@ -492,12 +494,12 @@ $currentStep = $_SESSION['step'];
                                                                     file</label>
                                                             </div>
                                                             <span class="author_image_error"></span>
-                                                            <label class="fileLabel">current file:
-                                                                currentFile.jpg</label>
+                                                            <label class="fileLabel"></label>
 
 
                                                         </div>
                                                         <div class="form-group col-sm-11 col-lg-9">
+                                                            <label for="cover_art_image_credit"><strong>Author image credit</strong></label>
                                                             <input id="author_image_credit" type="text"
                                                                    name="author_image_credit" class="form-control"
                                                                    value="" placeholder="Artist credit for author image"
@@ -525,7 +527,7 @@ $currentStep = $_SESSION['step'];
                                                                    for="retail_title_document">Select file</label>
                                                         </div>
                                                         <span class="retail_title_document_error"></span>
-                                                        <label class="fileLabelRetailTitle"></label>
+                                                        <label class="fileLabelRetailTitle fileLabel"></label>
                                                     </div>
 
                                                     <div class="form-group col-sm-11 col-lg-9">
@@ -541,7 +543,7 @@ $currentStep = $_SESSION['step'];
                                                                 file</label>
                                                         </div>
                                                         <span class="epub_document_error"></span>
-                                                        <label class="fileLabel">currentFile.epub</label>
+                                                        <label class="fileLabel"></label>
                                                     </div>
 
                                                     <div class="form-group col-sm-11 col-lg-9">
@@ -557,6 +559,7 @@ $currentStep = $_SESSION['step'];
                                                                 file</label>
                                                         </div>
                                                         <span class="mobi_document_error"></span>
+                                                        <label class="fileLabel"></label>
                                                     </div>
 
 
@@ -648,8 +651,6 @@ $currentStep = $_SESSION['step'];
 
             e.preventDefault();
 
-            console.log($("#title_document").val(), $(".fileLabelTitle").text(), $("#retail_title_document").val(), $(".fileLabelRetailTitle").text());
-
             if ($("#title_document").val() == "" && $(".fileLabelTitle").text() == "" && $("#retail_title_document").val() == "" && $(".fileLabelRetailTitle").text() == "") {
                 $(".title_document_error, .retail_title_document_error").show();
                 $(".title_document_error").text("Must have at least one title document");
@@ -721,8 +722,16 @@ $currentStep = $_SESSION['step'];
                                $(errorspan).text("Error resizing image");
                                break;
                             case "success":
+                                if (resarray[1] != "no file uploaded") {
                                 $(errorspan).show();
                                 $(errorspan).text("success");
+                                    var filenameArray = resarray[1].split("/");
+                                    filename = filenameArray.slice(-1)[0];
+                                    $(errorspan).siblings('label.fileLabel').text(filename);
+                                    
+                                    $("#" + x).siblings(".custom-file-label").text("Select file");
+                                    
+                                }
                                 break;
                         }
                     }
