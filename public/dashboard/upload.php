@@ -114,6 +114,11 @@ $mtype = array();
 
 foreach($filenames as $key => $value) {
 
+    if (!isset($_FILES[$key])) {
+        $response[$key] = "no file|No file uploaded";
+        continue;
+    }
+
 	$tmpFileError = $_FILES[$key]['error'];
 	$tmpFileTmpPath = $_FILES[$key]['tmp_name'];
 	$tmpFileName = $_FILES[$key]['name'];
@@ -190,11 +195,13 @@ foreach($filenames as $key => $value) {
 	} else {
 
 	    if ($key == "cover_art_image") {
-	        $response[$key] = "success|" . $coverDir;
+	        //$response[$key] = "success|" . $coverDir;
+            $response[$key] = "no file|no file uploaded";
         } else if ($key == "author_image") {
-	        $response[$key] = "success|" . $authorDir;
+	        //$response[$key] = "success|" . $authorDir;
+            $response[$key] = "no file|no file uploaded";
         } else {
-            $response[$key] = "success|no file uploaded";
+            $response[$key] = "no file|no file uploaded";
         }
 
 	}

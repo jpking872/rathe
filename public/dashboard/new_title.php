@@ -13,6 +13,10 @@ $_SESSION['userid'] = 1;
 //assume user is logged in
 $_SESSION['loggedIn'] = "yes";
 
+//1 for epub, 2 for mobi, 3 for both, 4 none
+$_SESSION['doctype'] = 2;
+$doctype = $_SESSION['doctype'];
+
 if (empty($_SESSION['step'])) $_SESSION['step'] = 1;
 
 if (isset($_POST['intake']) || isset($_POST['uploads'])) {
@@ -432,16 +436,18 @@ $currentStep = $_SESSION['step'];
                                                                     file</label>
                                                             </div>
                                                             <span class="cover_art_image_error"></span>
-                                                            <label class="fileLabelTitle fileLabel"></label>
+                                                            <label class="fileLabelCoverArt fileLabel"></label>
 
                                                         </div>
                                                         <div class="form-group col-sm-11 col-lg-9" style="margin-top:-20px">
                                                             <label for="cover_art_image_credit"><strong>Cover art image credit</strong></label>
+                                                            <span class="asterik-color">(*)</span>
                                                             <input id="cover_art_image_credit" type="text"
                                                                    name="cover_art_image_credit" class="form-control"
                                                                    value=""
                                                                    placeholder="Artist credit for cover art image"
                                                                    maxlength="250">
+                                                            <span class="cover_art_image_credit_error"></span>
 
                                                         </div>
                                                     </div>
@@ -494,16 +500,18 @@ $currentStep = $_SESSION['step'];
                                                                     file</label>
                                                             </div>
                                                             <span class="author_image_error"></span>
-                                                            <label class="fileLabel"></label>
+                                                            <label class="fileLabelAuthor fileLabel"></label>
 
 
                                                         </div>
                                                         <div class="form-group col-sm-11 col-lg-9" style="margin-top:-20px">
-                                                            <label for="cover_art_image_credit"><strong>Author image credit</strong></label>
+                                                            <label for="author_image_credit"><strong>Author image credit</strong></label>
+                                                            <span class="asterik-color">(*)</span>
                                                             <input id="author_image_credit" type="text"
                                                                    name="author_image_credit" class="form-control"
                                                                    value="" placeholder="Artist credit for author image"
                                                                    maxlength="250">
+                                                            <span class="author_image_credit_error"></span>
 
                                                         </div>
                                                     </div>
@@ -530,6 +538,8 @@ $currentStep = $_SESSION['step'];
                                                         <label class="fileLabelRetailTitle fileLabel"></label>
                                                     </div>
 
+                                                    <?php if ($doctype == "1" || $doctype == "3") { ?>
+
                                                     <div class="form-group col-sm-11 col-lg-9">
                                                         <label for="epub_document"><strong>ePub Document</strong>
                                                             <span class="asterik-color">(files allowed: .ePub, 3.0MB max)</span>
@@ -546,6 +556,8 @@ $currentStep = $_SESSION['step'];
                                                         <label class="fileLabel"></label>
                                                     </div>
 
+                                                    <?php } if ($doctype == "2" || $doctype == "3") { ?>
+
                                                     <div class="form-group col-sm-11 col-lg-9">
                                                         <label for="mobi_document"><strong>Mobi Document</strong>
                                                             <span class="asterik-color">(files allowed: .mobi, 3.0MB max)</span>
@@ -561,6 +573,8 @@ $currentStep = $_SESSION['step'];
                                                         <span class="mobi_document_error"></span>
                                                         <label class="fileLabel"></label>
                                                     </div>
+
+                                                    <?php } ?>
 
 
                                                 </div>
@@ -628,7 +642,6 @@ $currentStep = $_SESSION['step'];
             $(".coverArtImage").hide();
             $("#cover_art_image").val(null);
             $("#cover_art_image").siblings(".custom-file-label").html("Select file");
-            $("#cover_art_image_credit").val("");
         })
 
         $("#bioYes").click(function () {
@@ -638,7 +651,6 @@ $currentStep = $_SESSION['step'];
             $(".authorImage").hide();
             $("#author_image").val(null);
             $("#author_image").siblings(".custom-file-label").html("Select file");
-            $("#author_image_credit").val("");
         })
 
         $("#uploadSaveButton").click(function (e) {
@@ -649,14 +661,44 @@ $currentStep = $_SESSION['step'];
 
         $("#uploads").submit(function (e) {
 
+            formValid = true;
+
+            $(".title_document_error, .cover_art_image_error, .cover_art_image_credit_error, .author_image_error, .author_image_credit_error, .retail_title_document_error, .epub_document_error, .mobi_document_error").text("");
+
             e.preventDefault();
 
             if ($("#title_document").val() == "" && $(".fileLabelTitle").text() == "" && $("#retail_title_document").val() == "" && $(".fileLabelRetailTitle").text() == "") {
                 $(".title_document_error, .retail_title_document_error").show();
                 $(".title_document_error").text("Must have at least one title document");
                 $(".retail_title_document_error").text("Must have at least one title document");
-                return false;
+                formValid = false;
             }
+
+            if($("#coverYes").is(":checked")) {
+                if ($("#cover_art_image").val() == "" && $(".fileLabelCoverArt").text() == "") {
+                    $(".cover_art_image_error").show();
+                    $(".cover_art_image_error").text("Cover art image is required");
+                    formValid = false;
+                }
+                if ($("#cover_art_image_credit").val().length < 10) {
+                    $(".cover_art_image_credit_error").text("Cover art image credit is required");
+                    formValid = false;
+                }
+            }
+
+            if($("#bioYes").is(":checked")) {
+                if ($("#author_image").val() == "" && $(".fileLabelAuthor").text() == "") {
+                    $(".author_image_error").show();
+                    $(".author_image_error").text("Author image is required");
+                    formValid = false;
+                }
+                if ($("#author_image_credit").val().length < 10) {
+                    $(".author_image_credit_error").text("Author image credit is required");
+                    formValid = false;
+                }
+            }
+
+            if (!formValid) return false;
 
             var formData = new FormData($(this)[0]);
             $.ajax({
@@ -721,7 +763,8 @@ $currentStep = $_SESSION['step'];
                                $(errorspan).show();
                                $(errorspan).text("Error resizing image");
                                break;
-                            case "success":
+                           case "success":
+                           case "no file":
                                 if (resarray[1] != "no file uploaded") {
                                 $(errorspan).show();
                                 $(errorspan).text("success");
@@ -730,6 +773,7 @@ $currentStep = $_SESSION['step'];
                                     $(errorspan).siblings('label.fileLabel').text(filename);
                                     
                                     $("#" + x).siblings(".custom-file-label").text("Select file");
+                                    $("#" + x).val('');
                                     
                                 }
                                 break;
