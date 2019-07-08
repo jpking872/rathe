@@ -653,12 +653,6 @@ $currentStep = $_SESSION['step'];
             $("#author_image").siblings(".custom-file-label").html("Select file");
         })
 
-        $("#uploadSaveButton").click(function (e) {
-            var form = $("#uploads")[0];
-            var formData = new FormData(form)
-            var formString = $.param(formData);
-        });
-
         $("#uploads").submit(function (e) {
 
             formValid = true;
