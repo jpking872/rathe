@@ -1,5 +1,5 @@
 <?php
-/*require __DIR__.'/../../config/connector.php';
+require __DIR__.'/../../config/connector.php';
 require __DIR__.'/../../config/checkPermittedUsers.php';
 
 // email class
@@ -8,11 +8,7 @@ require __DIR__.'/../../config/email.dashboard.class.php';
 //Initialise CSRFGuard library
 //include_once __DIR__ .'/../../owasp/libs/csrf/csrfprotector.php';
 //csrfProtector::init();
-*/
 
-function filterStr($arg) {
-    return $arg;
-}
 
 // clean tabs
 $tab = filterStr($_GET['tab'] ?? '');
