@@ -23,23 +23,33 @@ if(strlen($tab) > 11)
     redirectUrl('logout.php');
 }
 
-if(isset($tab) && $tab == 'marketing')
+if(isset($tab) && $tab == 'newposts')
 {
     $basic = false;
-    $marketing = true;
-    $preferences = false;
+    $newposts = true;
+    $allposts = false;
+    $drafts = false;
 }
-else if(isset($tab) && $tab == 'preferences')
+else if(isset($tab) && $tab == 'allposts')
 {
     $basic = false;
-    $marketing = false;
-    $preferences = true;
+    $newposts = false;
+    $allposts = true;
+    $drafts = false;
+}
+else if(isset($tab) && $tab == 'drafts')
+{
+    $basic = false;
+    $newposts = false;
+    $allposts = false;
+    $drafts = true;
 }
 else {
 
     $basic = true;
-    $marketing = false;
-    $preferences = false;
+    $newposts = false;
+    $allposts = false;
+    $drafts = false;
 }
 
 
@@ -50,19 +60,12 @@ if(isset($_POST['blog_info']))
 {
     // sanitize $_POST
     $blogTitle = filterStr($_POST['blogTitle']);
-    $subTitle = filterStr($_POST['subTitle']);
     $blogTags = filterStr($_POST['blogTags']);
     $mainContent = filterStr($_POST['mainContent']);
-    $conclusion = filterStr($_POST['conclusion']);
 
     if(trim($blogTitle) == '' || strlen($blogTitle) < 2 || strlen($blogTitle) > 50)
     {
         $showError[] = "Invalid blog title";
-    }
-
-    if(trim($subTitle) == '' || strlen($subTitle) < 3 || strlen($subTitle) > 50)
-    {
-        $showError[] = "Invalid subtitle";
     }
 
     if(trim($blogTags) == '' || strlen($blogTags) < 3 || strlen($blogTags) > 100)
@@ -75,11 +78,6 @@ if(isset($_POST['blog_info']))
         $showError[] = "Invalid main content";
     }
 
-    if(trim($conclusion) == '' || strlen($conclusion) < 3 || strlen($conclusion) > 500)
-    {
-        $showError[] = "Invalid conclusion";
-    }
-
     // No error
     if(count($showError) == 0)
     {
@@ -90,10 +88,8 @@ if(isset($_POST['blog_info']))
         // build query
         $data = array(
             'BlogTitle' => $blogTitle,
-            'SubTitle' => $subTitle,
             'BlogTags' => $blogTags,
-            'MainContent' => $mainContent,
-            'Conclusion' => $conclusion
+            'MainContent' => $mainContent
         );
 
         // update record
@@ -104,8 +100,8 @@ if(isset($_POST['blog_info']))
 }
 
 
-// marketing tab
-if(isset($_POST['marketing']))
+// new posts tab
+if(isset($_POST['newposts']))
 {
     // sanitize $_POST
     $authorWebsite = filterStr($_POST['authorwebsite']);
@@ -209,9 +205,8 @@ if(isset($_POST['marketing']))
 
 }
 
-
-// preferences [change password]
-if(isset($_POST['change_pass']))
+// all posts tab
+if(isset($_POST['allposts']))
 {
 
     $fw = verifyPassword($bid);
@@ -271,7 +266,11 @@ if(isset($_POST['change_pass']))
     }
 
 }
-
+// drafts tab
+if(isset($_POST['drafts']))
+{
+    echo "drafts page";
+}
 ?>
 
 
@@ -456,13 +455,16 @@ if(isset($_POST['change_pass']))
                                                 <div class="collapse navbar-collapse" id="navbarNav">
                                                     <ul class="navbar-nav">
                                                         <li class="nav-item active">
-                                                            <a class="nav-link active" href="profile.php">Profile <span class="sr-only">(current)</span> </a>
+                                                            <a class="nav-link active" href="myblog.php">Info <span class="sr-only">(current)</span> </a>
                                                         </li>
                                                         <li class="nav-item">
-                                                            <a class="nav-link" href="?tab=marketing">Marketing </a>
+                                                            <a class="nav-link" href="?tab=newposts">New Posts </a>
                                                         </li>
                                                         <li class="nav-item">
-                                                            <a class="nav-link" href="?tab=preferences">Preferences </a>
+                                                            <a class="nav-link" href="?tab=allposts">All Posts </a>
+                                                        </li>
+                                                        <li class="nav-item">
+                                                            <a class="nav-link" href="?tab=drafts">Drafts </a>
                                                         </li>
                                                         <li class="nav-item">
                                                             <a class="nav-link" href="https://rathehelp.freshdesk.com/support/solutions" target="blank">Help</a>
@@ -510,42 +512,28 @@ if(isset($_POST['change_pass']))
                                                     ?>
 
                                                     <div class="form-row">
-                                                        <div class="form-group col-md-4">
+                                                        <div class="form-group col-md-9">
                                                             <label for="blogTitle"><strong>Blog Title</strong></label>
                                                             <input value="<?php if(isset($_POST['blog_info'])) { echo $blogTitle; } else { echo $row['blogTitle'] ?? ''; } ?>" type="text" class="form-control" id="blogTitle" name="blogTitle" maxlength="50" required>
                                                         </div>
-                                                        <div class="form-group col-md-4">
-                                                            <label for="subTitle"><strong>Subtitle</strong></label>
-                                                            <input value="<?php if(isset($_POST['blog_info'])) { echo $subTitle; } else { echo $row['subTitle'] ?? ''; } ?>" type="text" class="form-control" id="subTitle" name="subTitle" maxlength="50" required>
-                                                        </div>
+                                                    </div>
 
-                                                        <div class="form-group col-md-4">
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-9">
+                                                            <label for="mainContent"><strong>Main Content</strong></label>
+                                                            <textarea class="form-control" id="mainContent" name="mainContent" maxlength="2000" rows="12">
+                                                                <?php if(isset($_POST['blog_info'])) { echo $mainContent; } else { echo $row['mainContent']; } ?>
+                                                            </textarea>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-9">
                                                             <label for="blogTags"><strong>Blog Tags</strong></label>
                                                             <input value="<?php echo $row['blogTags'] ?? '';?>"
                                                                    type="text" class="form-control" id="blogTags" name="blogTags" required>
 
                                                         </div>
-
-                                                    </div>
-
-                                                    <div class="form-row">
-                                                        <div class="form-group col-md-6">
-                                                            <label for="mainContent"><strong>Main Content</strong></label>
-                                                            <textarea class="form-control" id="mainContent" name="mainContent" maxlength="2000" rows="5">
-                                                                <?php if(isset($_POST['blog_info'])) { echo $mainContent; } else { echo $row['mainContent']; } ?>
-                                                            </textarea>
-                                                        </div>
-
-                                                        <div class="form-group col-md-6">
-                                                            <label for="conclusion"><strong>Conclusion</strong></label>
-
-                                                            <textarea class="form-control" id="conclusion" name="conclusion" maxlength="500" rows="5">
-                                                                <?php if(isset($_POST['blog_info'])) { echo $conclusion; } else { echo $row['conclusion']; } ?>
-                                                            </textarea>
-
-
-                                                        </div>
-
                                                     </div>
 
                                                 </div>
@@ -575,7 +563,7 @@ if(isset($_POST['change_pass']))
                                             </div>
                                     </form>
 
-                                <?php } if($marketing){ ?>
+                                <?php } if($newposts){ ?>
                                     <div class="row">
                                         <div class="col-md-6"></div>
 
@@ -584,14 +572,17 @@ if(isset($_POST['change_pass']))
                                                 <div class="collapse navbar-collapse" id="navbarNav">
                                                     <ul class="navbar-nav">
                                                         <li class="nav-item">
-                                                            <a class="nav-link" href="profile.php">Profile </a>
+                                                            <a class="nav-link" href="myblog.php">Info </a>
                                                         </li>
                                                         <li class="nav-item active">
-                                                            <a class="nav-link active" href="?tab=marketing">Marketing
+                                                            <a class="nav-link active" href="?tab=newposts">New Posts
                                                                 <span class="sr-only">(current)</span></a>
                                                         </li>
                                                         <li class="nav-item">
-                                                            <a class="nav-link" href="?tab=preferences">Preferences </a>
+                                                            <a class="nav-link" href="?tab=allposts">All Posts </a>
+                                                        </li>
+                                                        <li class="nav-item">
+                                                            <a class="nav-link" href="?tab=drafts">Drafts </a>
                                                         </li>
                                                         <li class="nav-item">
                                                             <a class="nav-link" href="https://rathehelp.freshdesk.com/support/solutions" target="blank">Help</a>
@@ -602,12 +593,12 @@ if(isset($_POST['change_pass']))
                                         </div>
                                     </div>
 
-                                    <form id="marketing" action="" method="POST" autocomplete="off" novalidate>
+                                    <form id="newposts" action="" method="POST" autocomplete="off" novalidate>
 
                                         <div class="py-2 mx-4 mb-3">
                                             <div class="mb-3">
                                                 <h4>
-                                                    Marketing Details
+                                                    New Posts
                                                 </h4>
 
                                             </div>
@@ -723,7 +714,7 @@ if(isset($_POST['change_pass']))
 
                                                     <div class="col-8">
 
-                                                        <button type="submit" name="marketing" class="btn save-button">
+                                                        <button type="submit" name="newposts" class="btn save-button">
                                                             Update
                                                         </button>
                                                     </div>
@@ -731,7 +722,7 @@ if(isset($_POST['change_pass']))
                                             </div>
                                     </form>
 
-                                <?php } if($preferences){ ?>
+                                <?php } if($allposts){ ?>
                                     <div class="row">
                                         <div class="col-md-6"></div>
 
@@ -740,16 +731,21 @@ if(isset($_POST['change_pass']))
                                                 <div class="collapse navbar-collapse" id="navbarNav">
                                                     <ul class="navbar-nav">
                                                         <li class="nav-item">
-                                                            <a class="nav-link" href="profile.php">Profile </a>
+                                                            <a class="nav-link" href="myblog.php">Info </a>
                                                         </li>
                                                         <li class="nav-item">
-                                                            <a class="nav-link" href="?tab=marketing">
-                                                                Marketing
+                                                            <a class="nav-link" href="?tab=newposts">
+                                                                New Posts
                                                             </a>
                                                         </li>
                                                         <li class="nav-item active">
-                                                            <a class="nav-link active" href="?tab=preferences">Preferences
+                                                            <a class="nav-link active" href="?tab=allposts">All Posts
                                                                 <span class="sr-only">(current)</span></a>
+                                                        </li>
+                                                        <li class="nav-item">
+                                                            <a class="nav-link" href="?tab=drafts">
+                                                                Drafts
+                                                            </a>
                                                         </li>
                                                         <li class="nav-item">
                                                             <a class="nav-link" href="https://rathehelp.freshdesk.com/support/solutions" target="blank">Help</a>
@@ -760,12 +756,12 @@ if(isset($_POST['change_pass']))
                                         </div>
                                     </div>
 
-                                    <form id="change_pass" action="" method="POST" autocomplete="off">
+                                    <form id="allposts" action="" method="POST" autocomplete="off">
 
                                         <div class="py-2 mx-4 mb-3">
                                             <div class="mb-3">
                                                 <h4>
-                                                    Change Password
+                                                    All Posts
                                                 </h4>
 
                                             </div>
@@ -843,13 +839,108 @@ if(isset($_POST['change_pass']))
 
                                                     <div class="col-8">
                                                         <br>
-                                                        <button type="submit" name="change_pass" class="btn save-button">
+                                                        <button type="submit" name="allposts" class="btn save-button">
                                                             Update
                                                         </button>
                                                     </div>
                                                 </div>
                                             </div>
                                     </form>
+                                <?php } if($drafts) { ?>
+
+                                    <div class="row">
+                                        <div class="col-md-6"></div>
+
+                                        <div class="col-md-6">
+                                            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                                                <div class="collapse navbar-collapse" id="navbarNav">
+                                                    <ul class="navbar-nav">
+                                                        <li class="nav-item">
+                                                            <a class="nav-link" href="myblog.php">Info </a>
+                                                        </li>
+                                                        <li class="nav-item">
+                                                            <a class="nav-link" href="?tab=newposts">
+                                                                New Posts
+                                                            </a>
+                                                        </li>
+                                                        <li class="nav-item">
+                                                            <a class="nav-link" href="?tab=allposts">All Posts</a>
+                                                        </li>
+                                                        <li class="nav-item active">
+                                                            <a class="nav-link active" href="?tab=drafts">
+                                                                Drafts
+                                                                <span class="sr-only">(current)</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="nav-item">
+                                                            <a class="nav-link" href="https://rathehelp.freshdesk.com/support/solutions" target="blank">Help</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </nav>
+                                        </div>
+                                    </div>
+
+                                    <form id="drafts" action="" method="POST" autocomplete="off">
+
+                                        <div class="py-2 mx-4 mb-3">
+                                            <div class="mb-3">
+                                                <h4>
+                                                    Drafts
+                                                </h4>
+
+                                            </div>
+                                            <?php if(isset($_POST['change_pass'])) : ?>
+
+                                                <?php foreach ($showError as $error) : ?>
+                                                    <div class="alert alert-danger" role="alert">
+                                                        <span class="fa fa-exclamation-circle"> <?php echo $error; ?></span>
+                                                        <br>
+                                                    </div>
+                                                <?php endforeach ?>
+
+                                                <?php echo $success ?? ''; ?>
+                                            <?php endif ?>
+
+                                            <div class="px-4">
+
+                                                <div class="control-group">
+                                                    <br>
+                                                    <?php
+
+                                                    $row = authorInfo($bid);
+                                                    if($row) {
+                                                    ?>
+
+
+                                                    <div class="form-row">
+
+
+                                                    </div>
+
+
+
+                                                </div>
+                                                <?php } else {
+
+                                                    echo "<meta http-equiv='Refresh' Content='0; url=./'>";
+                                                    exit;
+                                                }
+                                                ?>
+                                                <div class="row">
+                                                    <br>
+
+                                                    <div class="col-8">
+                                                        <br>
+                                                        <button type="submit" name="drafts" class="btn save-button">
+                                                            Update
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                    </form>
+
+
                                 <?php } ?>
 
 
