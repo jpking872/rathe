@@ -293,6 +293,10 @@ if(isset($_POST['drafts']))
     <!-- Custom styles for this template -->
     <link href="css/style.css" rel="stylesheet">
     <style type="text/css">
+
+        .editorSpace {
+            margin-top:70px;
+        }
         .navbar {
             background-color: #fcfffd;
         }
@@ -526,8 +530,7 @@ if(isset($_POST['drafts']))
                                                             </textarea>
                                                         </div>
                                                     </div>
-
-                                                    <div class="form-row">
+                                                    <div class="form-row editorSpace">
                                                         <div class="form-group col-md-9">
                                                             <label for="blogTags"><strong>Blog Tags</strong></label>
                                                             <input value="<?php echo $row['blogTags'] ?? '';?>"
@@ -964,10 +967,20 @@ if(isset($_POST['drafts']))
 <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
 <script src="dist/js/bootstrap.min.js"></script>
+<script src="//cdn.quilljs.com/1.3.6/quill.min.js"></script>
+<link href="//cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
 
 <script type="text/javascript">
+
+    $(document).ready(function () {
+
+        var quill = new Quill('#mainContent', {
+            theme: 'snow'
+        });
+
+    })
 
 
     $( "#blog_info" ).validate( {
